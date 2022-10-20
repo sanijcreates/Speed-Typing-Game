@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 
 function App() {
   const STARTING_TIME = 5;
@@ -9,6 +9,8 @@ function App() {
   const [start, setStart] = useState(false)
   const [words, setWords] = useState(0)
   
+  const inputRef = useRef(null)
+
   useEffect(() => {
     if (timeRemaining > 0 && start) {
     setTimeout(() => {
@@ -24,7 +26,6 @@ function App() {
     setFormData({...formData, [event.target.name] : event.target.value})
     
   }
-  console.log(formData)
   //function that counts the number of words in the textarea
   function countWords() {
     //.split(" ") splits the string into an array of words. 
@@ -35,6 +36,11 @@ function App() {
     setStart(prevData => !prevData)
     setTimeRemaining(STARTING_TIME)
     setFormData({textArea : ""})
+
+    inputRef.current.disabled = false
+    //only having the code below doesn't work. becuase react runs the code asyncronously. what that means is, while running the setStart.., it will also run the code bwlow. so the code bwlow
+    //is runnnig while the textarea is disabled. 
+    inputRef.current.focus()
   }
  
   return (
@@ -44,6 +50,9 @@ function App() {
           value={formData.textArea}
           onChange = {handleChange}
           name = "textArea"
+          disabled = {!start}
+          ref = {inputRef}
+
         />
         <h4>Time Remaining: {timeRemaining}</h4>
         <button onClick = {startChange} disabled = {start}>Start the game</button>

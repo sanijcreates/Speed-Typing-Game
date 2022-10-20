@@ -6,13 +6,16 @@ function App() {
     textArea : ""
   })
   const [timeRemaining, setTimeRemaining] = useState(5)
+  const [start, setStart] = useState(false)
 
   useEffect(() => {
-    if (timeRemaining > 0) {
+    if (timeRemaining > 0 && start) {
     setTimeout(() => {
       setTimeRemaining(prevTime => prevTime - 1)
-    }, 1000) }
-  }, [timeRemaining])
+    }, 1000)} else if (timeRemaining === 0) {
+        setStart(false)
+    } 
+  }, [timeRemaining, start])
 
 
   function handleChange(event) {
@@ -25,7 +28,9 @@ function App() {
     const arr = formData.textArea.split(" ")
     return arr.filter(word => word != "").length;
   }
-  countWords();
+  function startChange() {
+    setStart(prevData => !prevData)
+  }
  
   return (
     <div className="App">
@@ -35,7 +40,7 @@ function App() {
           name = "textArea"
         />
         <h4>Time Remaining: {timeRemaining}</h4>
-        <button>Start the game</button>
+        <button onClick = {() => startChange()}>Start the game</button>
         <h1>Word Count: {countWords()}</h1>
     </div>
   );

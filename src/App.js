@@ -1,10 +1,19 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 function App() {
 
   const [formData, setFormData] = useState({
     textArea : ""
   })
+  const [timeRemaining, setTimeRemaining] = useState(5)
+
+  useEffect(() => {
+    if (timeRemaining > 0) {
+    setTimeout(() => {
+      setTimeRemaining(prevTime => prevTime - 1)
+    }, 1000) }
+  }, [timeRemaining])
+
 
   function handleChange(event) {
     setFormData({...formData, [event.target.name] : event.target.value})
@@ -25,7 +34,7 @@ function App() {
           onChange = {handleChange}
           name = "textArea"
         />
-        <h4>Time running: </h4>
+        <h4>Time Remaining: {timeRemaining}</h4>
         <button>Start the game</button>
         <h1>Word Count: {countWords()}</h1>
     </div>

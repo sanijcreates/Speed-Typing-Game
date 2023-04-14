@@ -1,19 +1,21 @@
 import React, {useState, useEffect, useRef} from "react"
 
 function useLogic() {
-  const STARTING_TIME = 6;
+  const STARTING_TIME = 60;
   const [formData, setFormData] = useState({
     textArea : ""
   })
-  const [timeRemaining, setTimeRemaining] = useState(STARTING_TIME)
+  const [time, setTime] = useState({
+    time: 60
+  });
+  const [timeRemaining, setTimeRemaining] = useState(time.time)
   const [start, setStart] = useState(false)
   const [words, setWords] = useState(0)
-  
+
   const inputRef = useRef(null) 
 
   function handleChange(event) {
     setFormData({...formData, [event.target.name] : event.target.value})
-    
   }
   //function that counts the number of words in the textarea
   function countWords() {
@@ -21,9 +23,16 @@ function useLogic() {
     const arr = formData.textArea.split(" ")
     return arr.filter(word => word != "").length;
   }
+  function timeChange(event) {
+    setTime({...time, [event.target.name] : event.target.value});
+  }
+  useEffect(() => {
+    setTimeRemaining(time.time)
+  }, [time.time])
   function startChange() {
     setStart(prevData => !prevData)
-    setTimeRemaining(STARTING_TIME)
+    setEnd(true)
+    setTimeRemaining(time.time)
     setFormData({textArea : ""})
 
     inputRef.current.disabled = false
@@ -31,8 +40,14 @@ function useLogic() {
     //is runnnig while the textarea is disabled. 
     inputRef.current.focus()
   }
+  function endChange() {
+    setStart(false)
+  }
+
   useEffect(() => {
-    if (timeRemaining > 0 && start) {
+    if(!start) {
+      setTimeRemaining(time.time)
+    } else if (timeRemaining > 0 && start) {
     setTimeout(() => {
       setTimeRemaining(prevTime => prevTime - 1)
     }, 1000)} else if (timeRemaining === 0) {
@@ -41,7 +56,8 @@ function useLogic() {
     } 
   }, [timeRemaining, start])
 
-  return [inputRef, formData, timeRemaining, start, handleChange, startChange, words]
+
+  return [inputRef, formData, timeRemaining, start, handleChange, startChange, words, time, timeChange, endChange ]
 }
 
 export default useLogic

@@ -13,7 +13,7 @@ body {
     font-weight: 400;
 }
 
-button {
+button, .button {
     font-family: 'Press Start 2P', cursive;
     display: block;
     margin: 0 auto;
@@ -33,7 +33,9 @@ h1 {
     font-size: 20px;
     text-align:center;
 }
-
+label {
+    display: block;
+}
 textarea {
     font-family: 'Press Start 2P', cursive;
     border: 3px solid black;
